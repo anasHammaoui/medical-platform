@@ -16,6 +16,7 @@ public class Creneau {
     private Specialiste specialiste;
     private LocalDateTime dateHeureDebut;
     private LocalDateTime dateHeureFin;
+    @Enumerated(EnumType.STRING)
     private CreneauEnum status;
     @OneToOne(mappedBy = "creneau")
     private DemandeExpertise demandeExpertise;

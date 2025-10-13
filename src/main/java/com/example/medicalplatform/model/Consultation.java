@@ -24,12 +24,12 @@ public class Consultation {
     private String diganostic;
     private String traitement;
     private Double cout;
-    @OneToMany(mappedBy = "consultations", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL)
     private  List<ActeTechnique> acteTechniques;
     @ManyToOne
     @JoinColumn(name = "dossier_id", nullable = false)
     private DossierMedical dossierMedical;
-    @OneToMany(mappedBy = "consultations", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL)
     private List<SignesVitaux> signesVitaux;
 
     public long getId() {

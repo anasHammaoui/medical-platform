@@ -1,5 +1,5 @@
 package com.example.medicalplatform.enums;
 
 public enum SpecialiteEnum {
-    CARDIOLOGIE,PNEUMOLOGIE;
+    CARDIOLOGIE,PNEUMOLOGIE, DERMATOLOGIE, NEUROLOGIE, ENDOCRINOLOGIE;
 }

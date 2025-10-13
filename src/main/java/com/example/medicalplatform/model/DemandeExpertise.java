@@ -3,6 +3,7 @@ package com.example.medicalplatform.model;
 import com.example.medicalplatform.enums.DemandePrioritee;
 import com.example.medicalplatform.enums.DemandeStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -13,8 +14,11 @@ public class DemandeExpertise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
+    @Enumerated(EnumType.STRING)
     private DemandeStatus status;
+    @Enumerated(EnumType.STRING)
     private DemandePrioritee prioritee;
+    @CreationTimestamp
     private LocalDateTime dateDemande;
     private String avisMedecin;
     @OneToOne(mappedBy = "demandeExpertise")

@@ -1,6 +1,7 @@
 package com.example.medicalplatform.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,8 @@ public class Patient {
     private LocalDateTime dateNaissance;
     private String numeroSecuriteSociale;
     private String mutuelle;
+    @CreationTimestamp
+    private LocalDateTime heurArrivee;
     private boolean fileAttente;
     @OneToOne
     @JoinColumn(name = "dossier_id", nullable = false)
@@ -109,5 +112,13 @@ public class Patient {
 
     public void setDossierMedical(DossierMedical dossierMedical) {
         this.dossierMedical = dossierMedical;
+    }
+
+    public LocalDateTime getHeurArrivee() {
+        return heurArrivee;
+    }
+
+    public void setHeurArrivee(LocalDateTime heurArrivee) {
+        this.heurArrivee = heurArrivee;
     }
 }
