@@ -22,8 +22,7 @@ public class Patient {
     @CreationTimestamp
     private LocalDateTime heurArrivee;
     private boolean fileAttente;
-    @OneToOne
-    @JoinColumn(name = "dossier_id", nullable = false)
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     private DossierMedical dossierMedical;
 
     public long getId() {

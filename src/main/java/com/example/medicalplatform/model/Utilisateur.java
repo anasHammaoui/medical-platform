@@ -19,6 +19,14 @@ public abstract class Utilisateur {
     @Column(nullable = false)
     private String motDePasse;
 
+    public Utilisateur(String nom, String prenom, String email, String motDePasse) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.motDePasse = motDePasse;
+    }
+    protected Utilisateur() {}
+
     public long getId() {
         return id;
     }

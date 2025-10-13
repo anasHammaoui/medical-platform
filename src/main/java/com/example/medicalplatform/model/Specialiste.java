@@ -10,13 +10,21 @@ import java.util.List;
 public class Specialiste extends Utilisateur{
     @Enumerated(EnumType.STRING)
     private SpecialiteEnum specialite;
-    @Column(nullable = false)
-    private double tarif;
-    @Column(nullable = false)
-    private int duree_consultation;
+    @Column(nullable = true)
+    private Double tarif;
+    @Column(nullable = true)
+    private Integer duree_consultation;
     @OneToMany(mappedBy = "specialiste", cascade = CascadeType.ALL)
     private List<Creneau> creneaux;
-
+    protected Specialiste(){
+        super();
+    }
+    public Specialiste(String nom, String prenom, String email, String password, String telephone, SpecialiteEnum specialite, double tarif, int duree_consultation) {
+        super(nom, prenom, email, password);
+        this.specialite = specialite;
+        this.tarif = tarif;
+        this.duree_consultation = duree_consultation;
+    }
     public SpecialiteEnum getSpecialite() {
         return specialite;
     }

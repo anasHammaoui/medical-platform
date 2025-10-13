@@ -18,7 +18,8 @@ public class Creneau {
     private LocalDateTime dateHeureFin;
     @Enumerated(EnumType.STRING)
     private CreneauEnum status;
-    @OneToOne(mappedBy = "creneau")
+    @OneToOne
+    @JoinColumn(name = "demande_expertise_id")
     private DemandeExpertise demandeExpertise;
 
     public Long getId() {

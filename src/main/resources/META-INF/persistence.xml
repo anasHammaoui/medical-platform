@@ -3,18 +3,33 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
              version="3.2">
-  <persistence-unit name="default">
-    <properties>
+  <persistence-unit name="medical-platform">
+      <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+      <class>com.example.medicalplatform.model.Utilisateur</class>
+      <class>com.example.medicalplatform.model.Specialiste</class>
+      <class>com.example.medicalplatform.model.Patient</class>
+      <class>com.example.medicalplatform.model.Infermier</class>
+      <class>com.example.medicalplatform.model.Generaliste</class>
+      <class>com.example.medicalplatform.model.Admin</class>
+      <class>com.example.medicalplatform.model.ActeTechnique</class>
+      <class>com.example.medicalplatform.model.Consultation</class>
+      <class>com.example.medicalplatform.model.Creneau</class>
+      <class>com.example.medicalplatform.model.DemandeExpertise</class>
+      <class>com.example.medicalplatform.model.DossierMedical</class>
+      <class>com.example.medicalplatform.model.SignesVitaux</class>
+      <properties>
         <!-- Database connection -->
-        <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/medicalmanagement"/>
+        <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/medicalmanagement?createDatabaseIfNotExist=true"/>
         <property name="jakarta.persistence.jdbc.user" value="root"/>
         <property name="jakarta.persistence.jdbc.password" value=""/>
         <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
         <!-- Hibernate settings -->
-        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-        <property name="hibernate.hbm2ddl.auto" value="none"/>
-        <property name="hibernate.show_sql" value="true"/>
+          <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+          <property name="hibernate.hbm2ddl.auto" value="update"/>
+          <property name="hibernate.show_sql" value="true"/>
+          <property name="hibernate.format_sql" value="true"/>
+
     </properties>
   </persistence-unit>
 </persistence>
