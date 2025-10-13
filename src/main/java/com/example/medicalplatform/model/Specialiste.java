@@ -3,6 +3,8 @@ package com.example.medicalplatform.model;
 import com.example.medicalplatform.enums.SpecialiteEnum;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("SPECIALISTE")
 public class Specialiste extends Utilisateur{
@@ -12,14 +14,8 @@ public class Specialiste extends Utilisateur{
     private double tarif;
     @Column(nullable = false)
     private int duree_consultation;
-
-    public int getDuree_consultation() {
-        return duree_consultation;
-    }
-
-    public void setDuree_consultation(int duree_consultation) {
-        this.duree_consultation = duree_consultation;
-    }
+    @OneToMany(mappedBy = "specialiste", cascade = CascadeType.ALL)
+    private List<Creneau> creneaux;
 
     public SpecialiteEnum getSpecialite() {
         return specialite;
@@ -35,5 +31,21 @@ public class Specialiste extends Utilisateur{
 
     public void setTarif(double tarif) {
         this.tarif = tarif;
+    }
+
+    public int getDuree_consultation() {
+        return duree_consultation;
+    }
+
+    public void setDuree_consultation(int duree_consultation) {
+        this.duree_consultation = duree_consultation;
+    }
+
+    public List<Creneau> getCreneaux() {
+        return creneaux;
+    }
+
+    public void setCreneaux(List<Creneau> creneaux) {
+        this.creneaux = creneaux;
     }
 }

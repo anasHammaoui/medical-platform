@@ -29,5 +29,102 @@ public class Consultation {
     @ManyToOne
     @JoinColumn(name = "dossier_id", nullable = false)
     private DossierMedical dossierMedical;
+    @OneToMany(mappedBy = "consultations", cascade = CascadeType.ALL)
+    private List<SignesVitaux> signesVitaux;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Generaliste getGeneraliste() {
+        return generaliste;
+    }
+
+    public void setGeneraliste(Generaliste generaliste) {
+        this.generaliste = generaliste;
+    }
+
+    public LocalDateTime getDateConsultation() {
+        return dateConsultation;
+    }
+
+    public void setDateConsultation(LocalDateTime dateConsultation) {
+        this.dateConsultation = dateConsultation;
+    }
+
+    public String getMotif() {
+        return motif;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
+    }
+
+    public StatutConsultation getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatutConsultation status) {
+        this.status = status;
+    }
+
+    public String getDiganostic() {
+        return diganostic;
+    }
+
+    public void setDiganostic(String diganostic) {
+        this.diganostic = diganostic;
+    }
+
+    public String getTraitement() {
+        return traitement;
+    }
+
+    public void setTraitement(String traitement) {
+        this.traitement = traitement;
+    }
+
+    public Double getCout() {
+        return cout;
+    }
+
+    public void setCout(Double cout) {
+        this.cout = cout;
+    }
+
+    public List<ActeTechnique> getActeTechniques() {
+        return acteTechniques;
+    }
+
+    public void setActeTechniques(List<ActeTechnique> acteTechniques) {
+        this.acteTechniques = acteTechniques;
+    }
+
+    public DossierMedical getDossierMedical() {
+        return dossierMedical;
+    }
+
+    public void setDossierMedical(DossierMedical dossierMedical) {
+        this.dossierMedical = dossierMedical;
+    }
+
+    public List<SignesVitaux> getSignesVitaux() {
+        return signesVitaux;
+    }
+
+    public void setSignesVitaux(List<SignesVitaux> signesVitaux) {
+        this.signesVitaux = signesVitaux;
+    }
 }

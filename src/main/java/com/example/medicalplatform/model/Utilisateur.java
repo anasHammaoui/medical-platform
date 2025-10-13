@@ -3,7 +3,7 @@ package com.example.medicalplatform.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="utilisateur")
+@Table(name="utilisateurs")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public abstract class Utilisateur {
@@ -58,5 +58,4 @@ public abstract class Utilisateur {
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
     }
-
 }

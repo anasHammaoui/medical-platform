@@ -18,4 +18,44 @@ public class ActeTechnique {
     @ManyToOne
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ActeTechniqueType getType() {
+        return type;
+    }
+
+    public void setType(ActeTechniqueType type) {
+        this.type = type;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public String getResultat() {
+        return resultat;
+    }
+
+    public void setResultat(String resultat) {
+        this.resultat = resultat;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
+    }
 }
