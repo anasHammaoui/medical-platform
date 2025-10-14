@@ -10,7 +10,4 @@ public class EmfUtil{
     public static EntityManagerFactory getEntityManagerFactory(){
         return emf;
     }
-    public static EntityManager getEntityManager(){
-        return emf.createEntityManager();
-    }
 }

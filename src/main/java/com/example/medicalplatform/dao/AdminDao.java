@@ -27,7 +27,7 @@ public class AdminDao {
             }
             System.err.println("Error saving admin: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Failed to save admin", e);
+            throw new RuntimeException("Failed to save admin" + e.getMessage(), e);
         } finally {
             em.close();
         }
