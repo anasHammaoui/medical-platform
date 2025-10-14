@@ -51,9 +51,9 @@ public class AuthService implements AuthServiceInterface {
 
                     String telephoneSpec = (String) additionalData.get("telephone");
                     SpecialiteEnum specialite = (SpecialiteEnum) additionalData.get("specialite");
-                    Double tarif = additionalData.containsKey("tarif") ?
+                    double tarif = additionalData.containsKey("tarif") ?
                             ((Number) additionalData.get("tarif")).doubleValue() : 150.0;
-                    Integer dureeConsultation = additionalData.containsKey("dureeConsultation") ?
+                    int dureeConsultation = additionalData.containsKey("dureeConsultation") ?
                             ((Number) additionalData.get("dureeConsultation")).intValue() : 30;
 
                     user = new Specialiste(nom, prenom, email, hashedPassword,

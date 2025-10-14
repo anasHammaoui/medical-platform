@@ -185,6 +185,10 @@
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
         </div>
 
+        <div class="form-group" style="display: none" >
+            <input type="text" name="token" value="${sessionScope.csrfToken}">
+        </div>
+
         <div class="form-actions">
             <button type="submit">Sign In</button>
         </div>

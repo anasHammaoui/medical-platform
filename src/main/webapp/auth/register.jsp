@@ -276,7 +276,9 @@
                     <input type="number" id="tarif" name="tarif" placeholder="200" min="0" step="50">
                 </div>
             </div>
-
+            <div class="form-group" style="display: none" >
+                <input type="text" name="token" value="${sessionScope.csrfToken}">
+            </div>
             <div class="form-row single">
                 <div class="form-group">
                     <label for="dureeConsultation">Consultation Duration (minutes)</label>

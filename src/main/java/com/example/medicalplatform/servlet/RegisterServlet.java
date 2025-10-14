@@ -3,11 +3,13 @@ package com.example.medicalplatform.servlet;
 import com.example.medicalplatform.enums.SpecialiteEnum;
 import com.example.medicalplatform.model.Utilisateur;
 import com.example.medicalplatform.service.impl.AuthService;
+import com.example.medicalplatform.utils.CsrfValidation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.hibernate.HibernateException;
 
 import java.io.IOException;
@@ -25,6 +27,9 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String csrfToken = CsrfValidation.generateCsrfToken();
+        HttpSession session = request.getSession();
+        session.setAttribute("csrfToken", csrfToken);
         request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
     }
 
@@ -36,45 +41,51 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        try {
-            Map<String, Object> additionalData = new HashMap<>();
+        HttpSession session = request.getSession(false);
+        if (session == null || !CsrfValidation.validateToken((String) session.getAttribute("csrfToken"), request.getParameter("token"))) {
+            request.setAttribute("errorMessage", "Invalid CSRF token");
+            request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
+        } else {
+            try {
+                Map<String, Object> additionalData = new HashMap<>();
 
-            if ("GENERALISTE".equalsIgnoreCase(role) || "SPECIALISTE".equalsIgnoreCase(role)) {
-                String telephone = request.getParameter("telephone");
-                additionalData.put("telephone", telephone);
-            }
-
-            if ("SPECIALISTE".equalsIgnoreCase(role)) {
-                String specialiteStr = request.getParameter("specialite");
-                if (specialiteStr != null && !specialiteStr.isEmpty()) {
-                    SpecialiteEnum specialite = SpecialiteEnum.valueOf(specialiteStr.toUpperCase());
-                    additionalData.put("specialite", specialite);
+                if ("GENERALISTE".equalsIgnoreCase(role) || "SPECIALISTE".equalsIgnoreCase(role)) {
+                    String telephone = request.getParameter("telephone");
+                    additionalData.put("telephone", telephone);
                 }
 
-                String tarifStr = request.getParameter("tarif");
-                if (tarifStr != null && !tarifStr.isEmpty()) {
-                    additionalData.put("tarif", Double.parseDouble(tarifStr));
+                if ("SPECIALISTE".equalsIgnoreCase(role)) {
+                    String specialiteStr = request.getParameter("specialite");
+                    if (specialiteStr != null && !specialiteStr.isEmpty()) {
+                        SpecialiteEnum specialite = SpecialiteEnum.valueOf(specialiteStr.toUpperCase());
+                        additionalData.put("specialite", specialite);
+                    }
+
+                    String tarifStr = request.getParameter("tarif");
+                    if (tarifStr != null && !tarifStr.isEmpty()) {
+                        additionalData.put("tarif", Double.parseDouble(tarifStr));
+                    }
+
+                    String dureeStr = request.getParameter("dureeConsultation");
+                    if (dureeStr != null && !dureeStr.isEmpty()) {
+                        additionalData.put("dureeConsultation", Integer.parseInt(dureeStr));
+                    }
                 }
 
-                String dureeStr = request.getParameter("dureeConsultation");
-                if (dureeStr != null && !dureeStr.isEmpty()) {
-                    additionalData.put("dureeConsultation", Integer.parseInt(dureeStr));
+                Utilisateur user = authService.register(nom, prenom, email, password, role, additionalData);
+
+                if (user != null) {
+                    request.setAttribute("successMessage", "Registration successful! You can now log in.");
+                    request.getRequestDispatcher("/auth/register.js").forward(request, response);
+                } else {
+                    request.setAttribute("errorMessage", "Error during registration");
+                    request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
                 }
-            }
 
-            Utilisateur user = authService.register(nom, prenom, email, password, role, additionalData);
-
-            if (user != null) {
-                request.setAttribute("successMessage", "Registration successful! You can now log in.");
-                request.getRequestDispatcher("/auth/register.js").forward(request, response);
-            } else {
-                request.setAttribute("errorMessage", "Error during registration");
+            } catch (HibernateException e) {
+                request.setAttribute("errorMessage", e.getMessage());
                 request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
             }
-
-        } catch (HibernateException e) {
-            request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
         }
     }
 }
