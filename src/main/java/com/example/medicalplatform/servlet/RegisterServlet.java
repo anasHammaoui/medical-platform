@@ -66,7 +66,7 @@ public class RegisterServlet extends HttpServlet {
 
             if (user != null) {
                 request.setAttribute("successMessage", "Registration successful! You can now log in.");
-                response.sendRedirect(request.getContextPath() + "/auth/login");
+                request.getRequestDispatcher("/auth/register.js").forward(request, response);
             } else {
                 request.setAttribute("errorMessage", "Error during registration");
                 request.getRequestDispatcher("/auth/register.jsp").forward(request, response);

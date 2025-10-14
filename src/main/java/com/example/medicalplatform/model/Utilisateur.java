@@ -18,7 +18,6 @@ public abstract class Utilisateur {
     private String email;
     @Column(nullable = false)
     private String motDePasse;
-
     public Utilisateur(String nom, String prenom, String email, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
@@ -26,7 +25,6 @@ public abstract class Utilisateur {
         this.motDePasse = motDePasse;
     }
     protected Utilisateur() {}
-
     public long getId() {
         return id;
     }
