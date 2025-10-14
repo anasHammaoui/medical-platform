@@ -1,8 +1,8 @@
 package com.example.medicalplatform.servlet;
 
-import com.example.medicalplatform.dao.AdminDao;
-import com.example.medicalplatform.dao.AuthDao;
+import com.example.medicalplatform.dao.impl.AuthDao;
 import com.example.medicalplatform.model.Admin;
+import com.example.medicalplatform.model.Utilisateur;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,11 +28,11 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        Admin admin = authDao.findAdminByEmail(email);
-        if (admin != null) {
-            if (BCrypt.checkpw(password, admin.getMotDePasse())) {
+        Utilisateur user = authDao.findUserByEmail(email);
+        if (user != null) {
+            if (BCrypt.checkpw(password, user.getMotDePasse())) {
                 HttpSession session = request.getSession();
-                session.setAttribute("admin", admin);
+                session.setAttribute("user", user);
                 request.setAttribute("auth", "Login successful");
 
             } else {
