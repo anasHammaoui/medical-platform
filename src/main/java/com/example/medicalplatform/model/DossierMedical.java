@@ -18,7 +18,8 @@ public class DossierMedical {
     private String traitementEnCours;
     @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL)
     private List<Consultation> consultations;
-
+    @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL)
+    private List<SignesVitaux> signesVitaux;
     public long getId() {
         return id;
     }
@@ -65,5 +66,11 @@ public class DossierMedical {
 
     public void setConsultations(List<Consultation> consultations) {
         this.consultations = consultations;
+    }
+    public List<SignesVitaux> getSignesVitaux() {
+        return signesVitaux;
+    }
+    public void setSignesVitaux(List<SignesVitaux> signesVitaux) {
+        this.signesVitaux = signesVitaux;
     }
 }

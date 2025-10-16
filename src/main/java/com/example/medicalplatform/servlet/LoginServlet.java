@@ -42,18 +42,18 @@ public class LoginServlet extends HttpServlet {
             try {
                 Utilisateur user = authService.login(email, password);
                 if (user != null){
-                    if (user instanceof Admin){
+                    if (user instanceof  Admin){
                         session.setAttribute("user",(Admin)user);
-                        response.sendRedirect(request.getContextPath()+"/admin/dashboard");
+                        response.sendRedirect(request.getContextPath()+"/dashboard/admin");
                     } else if(user instanceof Infermier){
                         session.setAttribute("user",(Infermier)user);
-                        response.sendRedirect(request.getContextPath()+"/infermier/dashboard");
+                        response.sendRedirect(request.getContextPath()+"/dashboard/infermier");
                     } else if(user instanceof Generaliste){
                         session.setAttribute("user",(Generaliste)user);
-                        response.sendRedirect(request.getContextPath()+"/generaliste/dashboard");
+                        response.sendRedirect(request.getContextPath()+"/dashboard/generaliste");
                     } else if (user instanceof Specialiste){
                         session.setAttribute("user",(Specialiste)user);
-                        response.sendRedirect(request.getContextPath()+"/specialiste/dashboard");
+                        response.sendRedirect(request.getContextPath()+"/dashboard/specialiste");
                     }
                 } else {
                     request.setAttribute("errorMessage", "Email or password is incorrect");

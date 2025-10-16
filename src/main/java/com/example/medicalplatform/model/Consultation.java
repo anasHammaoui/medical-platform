@@ -29,8 +29,6 @@ public class Consultation {
     @ManyToOne
     @JoinColumn(name = "dossier_id", nullable = false)
     private DossierMedical dossierMedical;
-    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL)
-    private List<SignesVitaux> signesVitaux;
 
     public long getId() {
         return id;
@@ -120,11 +118,4 @@ public class Consultation {
         this.dossierMedical = dossierMedical;
     }
 
-    public List<SignesVitaux> getSignesVitaux() {
-        return signesVitaux;
-    }
-
-    public void setSignesVitaux(List<SignesVitaux> signesVitaux) {
-        this.signesVitaux = signesVitaux;
-    }
 }
