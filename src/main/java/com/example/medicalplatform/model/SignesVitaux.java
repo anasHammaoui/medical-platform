@@ -1,6 +1,7 @@
 package com.example.medicalplatform.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +9,9 @@ import java.time.LocalDateTime;
 @Table(name = "signes_vitaux")
 public class SignesVitaux {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @CreationTimestamp
     private LocalDateTime dateSaisie;
     private String tension;
     private int frequenceCardiaque;
@@ -17,8 +19,7 @@ public class SignesVitaux {
     private int frequenceRespiratoire;
     private double poids;
     private double taille;
-    @ManyToOne
-    @JoinColumn(name = "dossier_medical_id", nullable = false)
+    @OneToOne(mappedBy = "signesVitaux", cascade = CascadeType.ALL)
     private DossierMedical dossierMedical;
     public Long getId() {
         return id;

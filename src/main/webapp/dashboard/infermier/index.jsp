@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
+<c:set var="patients" value="${requestScope.patients}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -558,7 +560,7 @@
             <div class="value" style="color: #3b82f6;">
                 <c:set var="consultCount" value="0"/>
                 <c:forEach items="${patients}" var="patient">
-                    <c:if test="${patient.fileAttente and not empty patient.dossierMedical.historiqueConsultations}">
+                    <c:if test="${patient.fileAttente and not empty patient.dossierMedical and not empty patient.dossierMedical.consultations}">
                         <c:set var="consultCount" value="${consultCount + 1}"/>
                     </c:if>
                 </c:forEach>
@@ -582,19 +584,20 @@
     <!-- Patient List Section -->
     <div class="patient-section">
         <div class="section-header">
-            <h2>Today's Patients Queue</h2>
+            <h2>Patients Queue</h2>
             <button class="btn btn-primary" onclick="openAddPatientModal()">+ Register New Patient</button>
         </div>
 
-        <c:if test="${not empty successMessage}">
+        <c:if test="${not empty sessionScope.successMessage}">
             <div style="padding: 0 24px; padding-top: 20px;">
-                <div class="alert alert-success">${successMessage}</div>
+                <div class="alert alert-success">${sessionScope.successMessage}</div>
             </div>
+            <c:remove var="successMessage" scope="session" />
         </c:if>
 
-        <c:if test="${not empty errorMessage}">
+        <c:if test="${not empty requestScope.errorMessage}">
             <div style="padding: 0 24px; padding-top: 20px;">
-                <div class="alert alert-error">${errorMessage}</div>
+                <div class="alert alert-error">${requestScope.errorMessage}</div>
             </div>
         </c:if>
 
@@ -607,7 +610,6 @@
                     <th>Phone</th>
                     <th>Arrival Time</th>
                     <th>Status</th>
-                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -631,17 +633,13 @@
                                         <c:when test="${not patient.fileAttente}">
                                             <span class="status-badge status-completed">Completed</span>
                                         </c:when>
-                                        <c:when test="${patient.fileAttente and not empty patient.dossierMedical.historiqueConsultations}">
+                                        <c:when test="${patient.fileAttente and not empty patient.dossierMedical and not empty patient.dossierMedical.consultations}">
                                             <span class="status-badge status-consultation">In Consultation</span>
                                         </c:when>
                                         <c:otherwise>
                                             <span class="status-badge status-waiting">Waiting</span>
                                         </c:otherwise>
                                     </c:choose>
-                                </td>
-                                <td>
-                                    <!-- Assume patient.toJSON() is a method on your Patient Java object that returns a JSON string -->
-                                    <button class="action-btn" onclick='viewPatient(${patient.toJSON()})'>View Details</button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -660,7 +658,7 @@
             <h2>Patient Arrival & Registration</h2>
             <button class="close-btn" onclick="closeAddPatientModal()">&times;</button>
         </div>
-        <form action="${pageContext.request.contextPath}/nurse/patients/add" method="post">
+        <form action="${pageContext.request.contextPath}/dashboard/infermier" method="post">
             <div class="modal-body">
                 <!-- Step 1: Administrative Data -->
                 <div class="form-section">
@@ -669,31 +667,31 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Last Name <span class="required">*</span></label>
-                            <input type="text" id="nom" name="nom" required>
+                            <input type="text" id="nom" name="nom" >
                         </div>
                         <div class="form-group">
                             <label for="prenom">First Name <span class="required">*</span></label>
-                            <input type="text" id="prenom" name="prenom" required>
+                            <input type="text" id="prenom" name="prenom" >
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="dateNaissance">Date of Birth <span class="required">*</span></label>
-                            <input type="date" id="dateNaissance" name="dateNaissance" required>
+                            <input type="date" id="dateNaissance" name="dateNaissance" >
                         </div>
                         <div class="form-group">
                             <label for="numeroSecuriteSociale">Social Security Number <span class="required">*</span></label>
-                            <input type="text" id="numeroSecuriteSociale" name="numeroSecuriteSociale" required placeholder="1234567890123">
+                            <input type="text" id="numeroSecuriteSociale" name="numeroSecuriteSociale"  placeholder="1234567890123">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="telephone">Phone Number <span class="required">*</span></label>
-                            <input type="text" id="telephone" name="telephone" required placeholder="+212 6XX XXX XXX">
+                            <input type="text" id="telephone" name="telephone"  placeholder="+212 6XX XXX XXX">
                         </div>
                         <div class="form-group">
                             <label for="adresse">Address <span class="required">*</span></label>
-                            <input type="text" id="adresse" name="adresse" required placeholder="Street, City">
+                            <input type="text" id="adresse" name="adresse"  placeholder="Street, City">
                         </div>
                     </div>
                     <div class="form-row single">
@@ -741,7 +739,7 @@
                                 Blood Pressure <span class="required">*</span>
                             </label>
                             <div class="input-with-unit">
-                                <input type="text" name="tension" placeholder="120/80" required pattern="[0-9]+/[0-9]+">
+                                <input type="text" name="tension" placeholder="120/80">
                                 <span class="unit">mmHg</span>
                             </div>
                         </div>
@@ -753,7 +751,7 @@
                                 Heart Rate <span class="required">*</span>
                             </label>
                             <div class="input-with-unit">
-                                <input type="number" name="frequenceCardiaque" placeholder="70" required min="30" max="200" step="1">
+                                <input type="number" name="frequenceCardiaque" placeholder="70"  step="1">
                                 <span class="unit">bpm</span>
                             </div>
                         </div>
@@ -765,7 +763,7 @@
                                 Body Temperature <span class="required">*</span>
                             </label>
                             <div class="input-with-unit">
-                                <input type="number" name="temperature" placeholder="36.5" required min="30" max="45" step="0.1">
+                                <input type="number" name="temperature"  step="0.1">
                                 <span class="unit">°C</span>
                             </div>
                         </div>
@@ -777,7 +775,7 @@
                                 Respiratory Rate <span class="required">*</span>
                             </label>
                             <div class="input-with-unit">
-                                <input type="number" name="frequenceRespiratoire" placeholder="16" required min="8" max="40" step="1">
+                                <input type="number" name="frequenceRespiratoire" placeholder="16"  step="1">
                                 <span class="unit">brpm</span>
                             </div>
                         </div>
@@ -789,7 +787,7 @@
                                 Weight
                             </label>
                             <div class="input-with-unit">
-                                <input type="number" name="poids" placeholder="70" min="0" max="300" step="0.1">
+                                <input type="number" name="poids" placeholder="70">
                                 <span class="unit">kg</span>
                             </div>
                         </div>
@@ -801,7 +799,7 @@
                                 Height
                             </label>
                             <div class="input-with-unit">
-                                <input type="number" name="taille" placeholder="175" min="0" max="250" step="0.1">
+                                <input type="number" name="taille" placeholder="175">
                                 <span class="unit">cm</span>
                             </div>
                         </div>
@@ -940,9 +938,9 @@
         const vitalSignsContainer = document.getElementById('vital-signs-container');
         vitalSignsContainer.innerHTML = ''; // Clear previous vital signs
 
-        if (patientData.dossierMedical && patientData.dossierMedical.historiqueConsultations && patientData.dossierMedical.historiqueConsultations.length > 0) {
+        if (patientData.dossierMedical && patientData.dossierMedical.consultations && patientData.dossierMedical.consultations.length > 0) {
             // Get the latest consultation (assuming the last one in the list is the most recent)
-            const latestConsultation = patientData.dossierMedical.historiqueConsultations[patientData.dossierMedical.historiqueConsultations.length - 1];
+            const latestConsultation = patientData.dossierMedical.consultations[patientData.dossierMedical.consultations.length - 1];
             const vitalSigns = latestConsultation.signesVitaux;
 
             if (vitalSigns) {
@@ -994,7 +992,7 @@
 
         if (!patientData.fileAttente) {
             statusText = '<span class="status-badge status-completed">Completed</span>';
-        } else if (patientData.fileAttente && patientData.dossierMedical && patientData.dossierMedical.historiqueConsultations && patientData.dossierMedical.historiqueConsultations.length > 0) {
+        } else if (patientData.fileAttente && patientData.dossierMedical && patientData.dossierMedical.consultations && patientData.dossierMedical.consultations.length > 0) {
             statusText = '<span class="status-badge status-consultation">In Consultation</span>';
         } else {
             statusText = '<span class="status-badge status-waiting">Waiting</span>';
@@ -1031,3 +1029,4 @@
 </script>
 </body>
 </html>
+
