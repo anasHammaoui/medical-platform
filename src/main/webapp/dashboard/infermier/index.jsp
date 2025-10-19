@@ -3,9 +3,9 @@
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <c:set var="patients" value="${requestScope.patients}" />
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Infirmier Dashboard - Medical Platform</title>
+    <title>Tableau de Bord Infirmier - Plateforme Médicale</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -528,10 +528,10 @@
 <body>
 <!-- Header -->
 <div class="header">
-    <h1>Nurse Dashboard</h1>
+    <h1>👨‍⚕️ Tableau de Bord Infirmier</h1>
     <div class="header-actions">
-        <span style="color: #6b7280; font-size: 14px;">Welcome, ${sessionScope.user.prenom} ${sessionScope.user.nom}</span>
-        <button class="btn btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/auth/logout'">Logout</button>
+        <span style="color: #6b7280; font-size: 14px;">Bienvenue, ${sessionScope.user.prenom} ${sessionScope.user.nom}</span>
+        <button class="btn btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/auth/logout'">Déconnexion</button>
     </div>
 </div>
 
@@ -540,11 +540,11 @@
     <!-- Stats Cards -->
     <div class="stats-grid">
         <div class="stat-card">
-            <h3>Total Patients Today</h3>
+            <h3>Total Patients Aujourd'hui</h3>
             <div class="value">${not empty patients ? patients.size() : 0}</div>
         </div>
         <div class="stat-card">
-            <h3>Waiting in Queue</h3>
+            <h3>En File d'Attente</h3>
             <div class="value" style="color: #f59e0b;">
                 <c:set var="waitingCount" value="0"/>
                 <c:forEach items="${patients}" var="patient">
@@ -629,15 +629,31 @@
                                 <td>${patient.telephone}</td>
                                 <td>${patient.heurArrivee}</td>
                                 <td>
+                                    <c:set var="hasActiveConsultation" value="false"/>
+                                    <c:set var="hasCompletedConsultation" value="false"/>
+                                    <c:if test="${not empty patient.dossierMedical and not empty patient.dossierMedical.consultations}">
+                                        <c:forEach items="${patient.dossierMedical.consultations}" var="consult">
+                                            <c:if test="${consult.status == 'EN_COURS' or consult.status == 'EN_ATTENTE_AVIS_SPECIALISTE'}">
+                                                <c:set var="hasActiveConsultation" value="true"/>
+                                            </c:if>
+                                            <c:if test="${consult.status == 'TERMINEE'}">
+                                                <c:set var="hasCompletedConsultation" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:if>
+                                    
                                     <c:choose>
-                                        <c:when test="${not patient.fileAttente}">
-                                            <span class="status-badge status-completed">Completed</span>
+                                        <c:when test="${hasCompletedConsultation}">
+                                            <span class="status-badge status-completed">✓ Terminée</span>
                                         </c:when>
-                                        <c:when test="${patient.fileAttente and not empty patient.dossierMedical and not empty patient.dossierMedical.consultations}">
-                                            <span class="status-badge status-consultation">In Consultation</span>
+                                        <c:when test="${hasActiveConsultation}">
+                                            <span class="status-badge status-consultation">🔴 En Consultation</span>
+                                        </c:when>
+                                        <c:when test="${patient.fileAttente}">
+                                            <span class="status-badge status-waiting">⏳ En Attente</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="status-badge status-waiting">Waiting</span>
+                                            <span class="status-badge status-waiting">-</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
@@ -990,18 +1006,35 @@
         let startConsultationBtn = document.getElementById('startConsultationBtn');
         startConsultationBtn.style.display = 'none'; // Hide by default
 
-        if (!patientData.fileAttente) {
-            statusText = '<span class="status-badge status-completed">Completed</span>';
-        } else if (patientData.fileAttente && patientData.dossierMedical && patientData.dossierMedical.consultations && patientData.dossierMedical.consultations.length > 0) {
-            statusText = '<span class="status-badge status-consultation">In Consultation</span>';
-        } else {
-            statusText = '<span class="status-badge status-waiting">Waiting</span>';
+        // Check consultation status
+        let hasActiveConsultation = false;
+        let hasCompletedConsultation = false;
+        
+        if (patientData.dossierMedical && patientData.dossierMedical.consultations) {
+            patientData.dossierMedical.consultations.forEach(function(consult) {
+                if (consult.status === 'EN_COURS' || consult.status === 'EN_ATTENTE_AVIS_SPECIALISTE') {
+                    hasActiveConsultation = true;
+                }
+                if (consult.status === 'TERMINEE') {
+                    hasCompletedConsultation = true;
+                }
+            });
+        }
+        
+        if (hasCompletedConsultation) {
+            statusText = '<span class="status-badge status-completed">✓ Terminée</span>';
+        } else if (hasActiveConsultation) {
+            statusText = '<span class="status-badge status-consultation">🔴 En Consultation</span>';
+        } else if (patientData.fileAttente) {
+            statusText = '<span class="status-badge status-waiting">⏳ En Attente</span>';
             // If patient is waiting, offer to start consultation
             startConsultationBtn.style.display = 'inline-flex';
             startConsultationBtn.onclick = function() {
                 // Redirect or submit form to start consultation
                 window.location.href = '${pageContext.request.contextPath}/nurse/consultation/start?patientId=' + patientData.id;
             };
+        } else {
+            statusText = '<span class="status-badge status-waiting">-</span>';
         }
         document.getElementById('view-status').innerHTML = statusText;
 

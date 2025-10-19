@@ -15,6 +15,7 @@ public class DossierMedical {
     private Patient patient;
     private String anticedents;
     private String allergies;
+    private String groupeSanguin;
     private String traitementEnCours;
     @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL)
     private List<Consultation> consultations;
@@ -51,6 +52,14 @@ public class DossierMedical {
 
     public void setAllergies(String allergies) {
         this.allergies = allergies;
+    }
+
+    public String getGroupeSanguin() {
+        return groupeSanguin;
+    }
+
+    public void setGroupeSanguin(String groupeSanguin) {
+        this.groupeSanguin = groupeSanguin;
     }
 
     public String getTraitementEnCours() {

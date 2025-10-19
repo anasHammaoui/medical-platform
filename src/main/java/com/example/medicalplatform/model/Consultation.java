@@ -29,6 +29,17 @@ public class Consultation {
     @ManyToOne
     @JoinColumn(name = "dossier_id", nullable = false)
     private DossierMedical dossierMedical;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "demande_expertise_id")
+    private DemandeExpertise demandeExpertise;
+
+    // Default consultation cost: 150 DH
+    @PrePersist
+    protected void onCreate() {
+        if (this.cout == null) {
+            this.cout = 150.0;
+        }
+    }
 
     public long getId() {
         return id;
@@ -86,6 +97,15 @@ public class Consultation {
         this.diganostic = diganostic;
     }
 
+    // Alias for correct spelling (JSP uses this)
+    public String getDiagnostic() {
+        return diganostic;
+    }
+
+    public void setDiagnostic(String diagnostic) {
+        this.diganostic = diagnostic;
+    }
+
     public String getTraitement() {
         return traitement;
     }
@@ -118,4 +138,11 @@ public class Consultation {
         this.dossierMedical = dossierMedical;
     }
 
+    public DemandeExpertise getDemandeExpertise() {
+        return demandeExpertise;
+    }
+
+    public void setDemandeExpertise(DemandeExpertise demandeExpertise) {
+        this.demandeExpertise = demandeExpertise;
+    }
 }

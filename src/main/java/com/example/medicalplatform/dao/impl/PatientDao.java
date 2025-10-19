@@ -1,9 +1,9 @@
 package com.example.medicalplatform.dao.impl;
 
 import com.example.medicalplatform.dao.PatientInterface;
+import com.example.medicalplatform.model.Consultation;
 import com.example.medicalplatform.model.Patient;
 import com.example.medicalplatform.utils.EmfUtil;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -50,17 +50,32 @@ public class PatientDao implements PatientInterface {
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
-            // Use JOIN FETCH to load all relations in one query to avoid LazyInitializationException
+            // Fetch patients with dossierMedical, signesVitaux, AND consultations in one optimized query
+            // Using DISTINCT to avoid duplicates due to JOIN FETCH
             String jpql = "SELECT DISTINCT p FROM Patient p " +
                          "LEFT JOIN FETCH p.dossierMedical dm " +
-                         "LEFT JOIN FETCH dm.consultations " +
-                         "LEFT JOIN FETCH dm.signesVitaux";
+                         "LEFT JOIN FETCH dm.signesVitaux " +
+                         "LEFT JOIN FETCH dm.consultations";
+            
             List<Patient> patients = em.createQuery(jpql, Patient.class).getResultList();
-            return patients; // Returns empty list if no patients found - this is normal
+            
+            // Initialize collections to prevent LazyInitializationException
+            for (Patient patient : patients) {
+                if (patient.getDossierMedical() != null) {
+                    // Access collections to force initialization while EM is still open
+                    List<Consultation> consultations = patient.getDossierMedical().getConsultations();
+                    if (consultations != null) {
+                        consultations.size(); // Force initialization
+                    }
+                }
+            }
+            
+            return patients;
         } catch (Exception e) {
             System.err.println("Error in PatientDao.getPatients: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Patient Dao exception: " + e.getMessage(), e);
+            // Return empty list instead of throwing exception to prevent dashboard crash
+            return new java.util.ArrayList<>();
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();

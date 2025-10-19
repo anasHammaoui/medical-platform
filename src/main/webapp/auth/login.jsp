@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Login - Medical Platform</title>
+    <title>Connexion - Plateforme Médicale</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -158,8 +158,8 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>Sign In</h2>
-        <p>Access your account</p>
+        <h2>🏥 Connexion</h2>
+        <p>Accédez à votre compte</p>
     </div>
 
     <c:if test="${not empty errorMessage}">
@@ -176,13 +176,13 @@
 
     <form action="${pageContext.request.contextPath}/auth/login" method="post">
         <div class="form-group">
-            <label for="email">Email Address <span class="required">*</span></label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+            <label for="email">Adresse Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="votre@email.com" required>
         </div>
 
         <div class="form-group">
-            <label for="password">Password <span class="required">*</span></label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <label for="password">Mot de Passe <span class="required">*</span></label>
+            <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
         </div>
 
         <div class="form-group" style="display: none" >
@@ -190,12 +190,12 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit">Sign In</button>
+            <button type="submit">Se Connecter</button>
         </div>
     </form>
 
     <div class="link">
-        <a href="${pageContext.request.contextPath}/auth/register">Don't have an account? Sign up</a>
+        <a href="${pageContext.request.contextPath}/auth/register">Vous n'avez pas de compte? Inscrivez-vous</a>
     </div>
 </div>
 </body>

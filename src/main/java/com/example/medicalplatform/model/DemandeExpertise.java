@@ -23,6 +23,8 @@ public class DemandeExpertise {
     private String avisMedecin;
     @OneToOne(mappedBy = "demandeExpertise")
     private Creneau creneau;
+    @OneToOne(mappedBy = "demandeExpertise")
+    private Consultation consultation;
 
     public Long getId() {
         return id;
@@ -78,5 +80,13 @@ public class DemandeExpertise {
 
     public void setCreneau(Creneau creneau) {
         this.creneau = creneau;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
     }
 }

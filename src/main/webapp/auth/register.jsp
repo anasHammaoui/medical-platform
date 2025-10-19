@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Register - Medical Platform</title>
+    <title>Inscription - Plateforme Médicale</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -189,8 +189,8 @@
 <body>
 <div class="container">
     <div class="header">
-        <h2>Create an Account</h2>
-        <p>Please fill in the information below to register</p>
+        <h2>🏥 Créer un Compte</h2>
+        <p>Veuillez remplir les informations ci-dessous pour vous inscrire</p>
     </div>
 
     <c:if test="${not empty errorMessage}">
@@ -209,12 +209,12 @@
         <!-- Personal Information -->
         <div class="form-row">
             <div class="form-group">
-                <label for="fName">First Name <span class="required">*</span></label>
+                <label for="fName">Prénom <span class="required">*</span></label>
                 <input type="text" id="fName" name="fName" required>
             </div>
 
             <div class="form-group">
-                <label for="lName">Last Name <span class="required">*</span></label>
+                <label for="lName">Nom <span class="required">*</span></label>
                 <input type="text" id="lName" name="lName" required>
             </div>
         </div>
@@ -222,26 +222,26 @@
         <!-- Account Information -->
         <div class="form-row">
             <div class="form-group">
-                <label for="email">Email Address <span class="required">*</span></label>
+                <label for="email">Adresse Email <span class="required">*</span></label>
                 <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Password <span class="required">*</span></label>
-                <input type="password" id="password" name="password" required minlength="6" placeholder="Minimum 6 characters">
+                <label for="password">Mot de Passe <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required minlength="6" placeholder="Minimum 6 caractères">
             </div>
         </div>
 
         <!-- Role Selection -->
         <div class="form-row single">
             <div class="form-group">
-                <label for="role">Role <span class="required">*</span></label>
+                <label for="role">Rôle <span class="required">*</span></label>
                 <select id="role" name="role" required>
-                    <option value="">Select a role</option>
-                    <option value="ADMIN">Administrator</option>
-                    <option value="GENERALISTE">General Practitioner</option>
-                    <option value="SPECIALISTE">Specialist Doctor</option>
-                    <option value="INFERMIER">Nurse</option>
+                    <option value="">Sélectionner un rôle</option>
+                    <option value="ADMIN">Administrateur</option>
+                    <option value="GENERALISTE">Médecin Généraliste</option>
+                    <option value="SPECIALISTE">Médecin Spécialiste</option>
+                    <option value="INFERMIER">Infirmier(ère)</option>
                 </select>
             </div>
         </div>
@@ -250,7 +250,7 @@
         <div id="telephoneFields" class="conditional-fields">
             <div class="form-row single">
                 <div class="form-group">
-                    <label for="telephone">Phone Number</label>
+                    <label for="telephone">Numéro de Téléphone</label>
                     <input type="text" id="telephone" name="telephone" placeholder="+212 6XX XXX XXX">
                 </div>
             </div>
@@ -260,19 +260,19 @@
         <div id="specialisteFields" class="conditional-fields">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="specialite">Specialty <span class="required">*</span></label>
+                    <label for="specialite">Spécialité <span class="required">*</span></label>
                     <select id="specialite" name="specialite">
-                        <option value="">Select a specialty</option>
-                        <option value="CARDIOLOGIE">Cardiology</option>
-                        <option value="PNEUMOLOGIE">Pulmonology</option>
-                        <option value="DERMATOLOGIE">Dermatology</option>
-                        <option value="PEDIATRIE">Pediatrics</option>
-                        <option value="NEUROLOGIE">Neurology</option>
+                        <option value="">Sélectionner une spécialité</option>
+                        <option value="CARDIOLOGIE">Cardiologie</option>
+                        <option value="PNEUMOLOGIE">Pneumologie</option>
+                        <option value="DERMATOLOGIE">Dermatologie</option>
+                        <option value="PEDIATRIE">Pédiatrie</option>
+                        <option value="NEUROLOGIE">Neurologie</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="tarif">Consultation Fee (DH)</label>
+                    <label for="tarif">Tarif de Consultation (DH)</label>
                     <input type="number" id="tarif" name="tarif" placeholder="200" min="0" step="50">
                 </div>
             </div>
@@ -281,19 +281,19 @@
             </div>
             <div class="form-row single">
                 <div class="form-group">
-                    <label for="dureeConsultation">Consultation Duration (minutes)</label>
+                    <label for="dureeConsultation">Durée de Consultation (minutes)</label>
                     <input type="number" id="dureeConsultation" name="dureeConsultation" placeholder="30" min="15" step="5">
                 </div>
             </div>
         </div>
 
         <div class="form-actions">
-            <button type="submit">Create Account</button>
+            <button type="submit">S'inscrire</button>
         </div>
     </form>
 
     <div class="link">
-        <a href="${pageContext.request.contextPath}/auth/login">Already have an account? Sign in</a>
+        <a href="${pageContext.request.contextPath}/auth/login">Vous avez déjà un compte? Connectez-vous</a>
     </div>
 </div>
 
