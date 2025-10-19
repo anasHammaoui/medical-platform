@@ -58,7 +58,7 @@ public class ConsultationDetailServlet extends HttpServlet {
             request.setAttribute("specialites", SpecialiteEnum.values());
             request.setAttribute("priorites", DemandePrioritee.values());
             
-            request.getRequestDispatcher("/WEB-INF/views/generaliste/consultation.jsp").forward(request, response);
+            request.getRequestDispatcher("/dashboard/generaliste/consultation.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
             System.err.println("Invalid consultation ID format: " + e.getMessage());
@@ -127,7 +127,7 @@ public class ConsultationDetailServlet extends HttpServlet {
                 request.setAttribute("specialistes", specialistes);
                 request.setAttribute("priorites", DemandePrioritee.values());
                 
-                request.getRequestDispatcher("/WEB-INF/views/generaliste/demande-expertise.jsp").forward(request, response);
+                request.getRequestDispatcher("/dashboard/generaliste/demande-expertise.jsp").forward(request, response);
                 return;
                 
             } else if ("createDemande".equals(action)) {

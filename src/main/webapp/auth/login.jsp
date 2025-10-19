@@ -185,10 +185,6 @@
             <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
         </div>
 
-        <div class="form-group" style="display: none" >
-            <input type="text" name="token" value="${sessionScope.csrfToken}">
-        </div>
-
         <div class="form-actions">
             <button type="submit">Se Connecter</button>
         </div>

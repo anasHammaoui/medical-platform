@@ -48,7 +48,7 @@ public class InfermierServlet extends HttpServlet {
         
         request.setAttribute("patients", patients);
         
-        request.getRequestDispatcher("/dashboard/infermier/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/dashboard/infermier/login.jsp").forward(request, response);
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // patient infos
@@ -101,7 +101,7 @@ public class InfermierServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/dashboard/infermier");
         } catch (HibernateException e) {
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/dashboard/infermier/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/dashboard/infermier/login.jsp").forward(request, response);
         }
 
     }

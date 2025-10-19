@@ -71,13 +71,13 @@ public class GeneralisteServlet extends HttpServlet {
             request.setAttribute("todayCount", todayCount);
             request.setAttribute("generaliste", generaliste);
             
-            request.getRequestDispatcher("/WEB-INF/views/generaliste/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/dashboard/generaliste/dashboard.jsp").forward(request, response);
             
         } catch (Exception e) {
             System.err.println("Error in GeneralisteServlet: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("errorMessage", "Error loading dashboard data");
-            request.getRequestDispatcher("/WEB-INF/views/generaliste/dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/dashboard/generaliste/dashboard.jsp").forward(request, response);
         }
     }
 

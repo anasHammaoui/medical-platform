@@ -254,7 +254,7 @@
         <h1>👨‍⚕️ Dashboard Généraliste</h1>
         <div class="header-actions">
             <span style="color: #6b7280; font-size: 14px;">Bienvenue, Dr. ${sessionScope.user.prenom} ${sessionScope.user.nom}</span>
-            <form action="${pageContext.request.contextPath}/auth/logout" method="post" style="margin: 0;">
+            <form action="${pageContext.request.contextPath}/auth/logout" method="get" style="margin: 0;">
                 <button type="submit" class="btn btn-secondary">Déconnexion</button>
             </form>
         </div>

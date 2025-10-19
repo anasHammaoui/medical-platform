@@ -1,6 +1,5 @@
 package com.example.medicalplatform.servlet;
 
-import com.example.medicalplatform.dao.impl.AuthDao;
 import com.example.medicalplatform.model.*;
 import com.example.medicalplatform.service.impl.AuthService;
 import com.example.medicalplatform.utils.CsrfValidation;
@@ -11,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.HibernateException;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 
@@ -24,9 +22,7 @@ public class LoginServlet extends HttpServlet {
     }
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String csrfToken = CsrfValidation.generateCsrfToken();
-        HttpSession session = request.getSession();
-        session.setAttribute("csrfToken", csrfToken);
+
         request.getRequestDispatcher("/auth/login.jsp").forward(request,response);
     }
     @Override
@@ -35,11 +31,8 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         HttpSession session = request.getSession(false);
-        if (session == null || !CsrfValidation.validateToken((String)session.getAttribute("csrfToken"), request.getParameter("token"))){
-            request.setAttribute("errorMessage", "Invalid CSRF token");
-            request.getRequestDispatcher("/auth/login.jsp").forward(request,response);
-        } else {
-            try {
+        
+        try {
                 Utilisateur user = authService.login(email, password);
                 if (user != null){
                     if (user instanceof  Admin){
@@ -63,9 +56,6 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("message",e.getMessage());
                 request.getRequestDispatcher("/auth/login.jsp").forward(request,response);
             }
-        }
-
-
     }
 
 }
