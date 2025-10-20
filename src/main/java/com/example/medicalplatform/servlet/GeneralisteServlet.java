@@ -34,7 +34,6 @@ public class GeneralisteServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         
-        // Check authentication
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
@@ -48,19 +47,15 @@ public class GeneralisteServlet extends HttpServlet {
         Generaliste generaliste = (Generaliste) session.getAttribute("user");
         
         try {
-            // Get all patients in waiting queue
             List<Patient> allPatients = patientService.getPatients();
             
-            // Get generaliste's consultations
             List<Consultation> consultations = consultationService.getConsultationsByGeneraliste(generaliste.getId());
             
-            // Filter patients using Stream API: only those waiting AND without active consultations
             List<Patient> waitingPatients = allPatients.stream()
                     .filter(patient -> patient != null && patient.isFileAttente())
                     .filter(patient -> !hasActiveConsultation(patient))
                     .collect(Collectors.toList());
             
-            // Calculate today's consultations count
             long todayCount = consultations.stream()
                     .filter(c -> c != null && c.getDateConsultation() != null)
                     .filter(c -> c.getDateConsultation().toLocalDate().equals(java.time.LocalDate.now()))
@@ -81,13 +76,6 @@ public class GeneralisteServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Helper method to check if a patient has an active or completed consultation
-     * Patient should not appear in waiting queue if they have any consultation that is:
-     * - EN_COURS (in progress)
-     * - EN_ATTENTE_AVIS_SPECIALISTE (waiting for specialist opinion)
-     * - TERMINEE (completed)
-     */
     private boolean hasActiveConsultation(Patient patient) {
         if (patient == null || patient.getDossierMedical() == null) {
             return false;
@@ -123,22 +111,18 @@ public class GeneralisteServlet extends HttpServlet {
                 long patientId = Long.parseLong(request.getParameter("patientId"));
                 Patient patient = patientService.getPatient(patientId);
                 
-                // Validate patient has dossier medical
                 if (patient == null || patient.getDossierMedical() == null) {
                     request.setAttribute("errorMessage", "Patient or medical record not found");
                     doGet(request, response);
                     return;
                 }
                 
-                // Create new consultation
                 Consultation consultation = new Consultation();
-                // Use the generaliste ID to avoid detached entity issues
                 consultation.setGeneraliste(generaliste);
                 consultation.setDossierMedical(patient.getDossierMedical());
                 consultation.setDateConsultation(LocalDateTime.now());
                 consultation.setStatus(StatutConsultation.EN_COURS);
                 
-                // Create consultation and get the persisted entity with ID
                 Consultation savedConsultation = consultationService.createConsultation(consultation);
                 
                 if (savedConsultation != null && savedConsultation.getId() > 0) {

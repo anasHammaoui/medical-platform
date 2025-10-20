@@ -22,12 +22,10 @@ public class ConsultationDao implements ConsultationInterface {
         try {
             em.getTransaction().begin();
             
-            // Merge the generaliste if it's detached (from session)
             if (consultation.getGeneraliste() != null && consultation.getGeneraliste().getId() > 0) {
                 consultation.setGeneraliste(em.merge(consultation.getGeneraliste()));
             }
             
-            // Merge the dossierMedical if needed
             if (consultation.getDossierMedical() != null && consultation.getDossierMedical().getId() > 0) {
                 consultation.setDossierMedical(em.merge(consultation.getDossierMedical()));
             }
@@ -68,28 +66,15 @@ public class ConsultationDao implements ConsultationInterface {
     public Consultation getConsultation(long id) throws HibernateException {
         EntityManager em = emf.createEntityManager();
         try {
-            // Fetch consultation with all required associations in ONE query
             String jpql = "SELECT c FROM Consultation c " +
                          "LEFT JOIN FETCH c.generaliste g " +
                          "LEFT JOIN FETCH c.dossierMedical dm " +
                          "LEFT JOIN FETCH dm.patient p " +
                          "LEFT JOIN FETCH dm.signesVitaux sv " +
                          "WHERE c.id = :id";
-            Consultation consultation = em.createQuery(jpql, Consultation.class)
+            return em.createQuery(jpql, Consultation.class)
                     .setParameter("id", id)
                     .getSingleResult();
-            
-            // Force initialize collections to prevent LazyInitializationException
-            if (consultation.getActeTechniques() != null) {
-                consultation.getActeTechniques().size();
-            }
-            
-            if (consultation.getDossierMedical() != null && 
-                consultation.getDossierMedical().getConsultations() != null) {
-                consultation.getDossierMedical().getConsultations().size();
-            }
-            
-            return consultation;
         } catch (Exception e) {
             System.err.println("Error getting consultation: " + e.getMessage());
             e.printStackTrace();

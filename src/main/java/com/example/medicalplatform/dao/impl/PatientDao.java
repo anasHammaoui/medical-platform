@@ -50,27 +50,13 @@ public class PatientDao implements PatientInterface {
         EntityManager em = null;
         try {
             em = emf.createEntityManager();
-            // Fetch patients with dossierMedical, signesVitaux, AND consultations in one optimized query
-            // Using DISTINCT to avoid duplicates due to JOIN FETCH
             String jpql = "SELECT DISTINCT p FROM Patient p " +
                          "LEFT JOIN FETCH p.dossierMedical dm " +
                          "LEFT JOIN FETCH dm.signesVitaux " +
                          "LEFT JOIN FETCH dm.consultations";
-            
-            List<Patient> patients = em.createQuery(jpql, Patient.class).getResultList();
-            
-            // Initialize collections to prevent LazyInitializationException
-            for (Patient patient : patients) {
-                if (patient.getDossierMedical() != null) {
-                    // Access collections to force initialization while EM is still open
-                    List<Consultation> consultations = patient.getDossierMedical().getConsultations();
-                    if (consultations != null) {
-                        consultations.size(); // Force initialization
-                    }
-                }
-            }
-            
-            return patients;
+
+
+            return em.createQuery(jpql, Patient.class).getResultList();
         } catch (Exception e) {
             System.err.println("Error in PatientDao.getPatients: " + e.getMessage());
             e.printStackTrace();

@@ -106,7 +106,6 @@ public class ConsultationDetailServlet extends HttpServlet {
                 consultation.setTraitement(traitement);
                 consultation.setStatus(StatutConsultation.TERMINEE);
                 
-                // Remove patient from waiting queue
                 consultation.getDossierMedical().getPatient().setFileAttente(false);
                 
                 consultationService.updateConsultation(consultation);
@@ -119,7 +118,6 @@ public class ConsultationDetailServlet extends HttpServlet {
                 String specialiteStr = request.getParameter("specialite");
                 SpecialiteEnum specialite = SpecialiteEnum.valueOf(specialiteStr);
                 
-                // Get specialists for this specialty (sorted by tariff)
                 List<Specialiste> specialistes = consultationService.getSpecialistesBySpecialite(specialite);
                 
                 request.setAttribute("consultation", consultation);
@@ -140,7 +138,6 @@ public class ConsultationDetailServlet extends HttpServlet {
                 demande.setQuestion(question);
                 demande.setPrioritee(DemandePrioritee.valueOf(prioriteStr));
                 
-                // Note: Specialist and creneau linking will be done in the specialist module
                 consultationService.createDemandeExpertise(consultation, demande);
                 
                 session.setAttribute("successMessage", "Specialist request created successfully");

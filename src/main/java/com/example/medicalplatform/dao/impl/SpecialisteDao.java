@@ -21,7 +21,6 @@ public class SpecialisteDao implements SpecialisteInterface {
     public List<Specialiste> getSpecialistesBySpecialite(SpecialiteEnum specialite) throws HibernateException {
         EntityManager em = emf.createEntityManager();
         try {
-            // Get specialists and use JPQL ORDER BY for tariff sorting (cheapest first)
             String jpql = "SELECT s FROM Specialiste s " +
                          "LEFT JOIN FETCH s.creneaux " +
                          "WHERE s.specialite = :specialite " +
@@ -43,10 +42,6 @@ public class SpecialisteDao implements SpecialisteInterface {
             Specialiste specialiste = em.find(Specialiste.class, id);
             if (specialiste == null) {
                 throw new HibernateException("Specialiste not found with id: " + id);
-            }
-            // Force load creneaux
-            if (specialiste.getCreneaux() != null) {
-                specialiste.getCreneaux().size();
             }
             return specialiste;
         } catch (Exception e) {
